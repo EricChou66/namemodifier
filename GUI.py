@@ -1,37 +1,104 @@
+#!/usr/bin/python3
+
 import sys
-from PyQt5.QtWidgets import QWidget, QPushButton, QApplication,\
-    QDesktopWidget, QMessageBox
+from PyQt5.QtWidgets import  QApplication,\
+    QDesktopWidget, QMessageBox, QMainWindow, QFileDialog, QErrorMessage
+from PyQt5.uic import loadUi
+from fileio import folder_exist
+from fileio import change_files_in_folder
+from fileio import change_srt_files_in_folder
 
 
+class Main(QMainWindow):
 
-class Example(QWidget):
-
-    def __init__(self):
-        super().__init__()
-
+    def __init__(self, parent=None):
+        super(Main, self).__init__(parent)
+        loadUi('./UI/mainwindow.ui', self)
+        self.title = "Name Modifier UI"
         self.initUI()
+        error_dialog = QErrorMessage()
+        error_dialog.showMessage('Oh no!')
 
     def initUI(self):
+        # Set Window Title
+        self.setWindowTitle(self.title)
 
-        qbtn = QPushButton('Quit', self)
-        qbtn.clicked.connect(self.close)
-        qbtn.resize(qbtn.sizeHint())
-        qbtn.move(500, 350)
+        # Quit Button
+        self.quitBtn.clicked.connect(self.close)
 
-        self.resize(600, 400)
-        self.center()
-        self.setWindowTitle('Example')
-        self.show()
+        # Select Folder Button
+        self.folderBtn.clicked.connect(self.select_folder)
+
+        # Select Srt Folder Button
+        self.srtBtn.clicked.connect(self.select_srt_folder)
+
+        # Select Output Folder Button
+        self.outputBtn.clicked.connect(self.select_output_folder)
+
+        # Clear Button
+        self.clearBtn.clicked.connect(self.clear)
+
+        # Skip Duplicate file CheckBox
+        self.skipdupBox.stateChanged.connect(lambda: self.checkbox_state(self.skipdupBox))
+
+        # Output file in the origin path
+        self.samefoldBox.stateChanged.connect(lambda: self.checkbox_state(self.samefoldBox))
+
+        # Complex mode CheckBox
+        self.complexBox.stateChanged.connect(lambda: self.checkbox_state(self.complexBox))
+
+        # Original filename input check:
+        self.originalfnStr.textChanged.connect(self.ok_btn_validate)
+
+        # Disable complex mode's original filename input
+        self.clear()
+
+        # Ok Button
+        self.okBtn.clicked.connect(self.change_files_name)
+
+        # Text change for Files Folder, New filename, and Output Folder
+        self.folderStr.textChanged.connect(self.ok_btn_validate)
+        self.newfilenameStr.textChanged.connect(self.ok_btn_validate)
+        self.outputStr.textChanged.connect(self.ok_btn_validate)
+
+    def select_folder(self):
+        folder_dir = QFileDialog.getExistingDirectory(
+            self, "Open a folder", "./")
+        self.folderStr.setText(folder_dir)
+
+    def select_srt_folder(self):
+        srt_dir = QFileDialog.getExistingDirectory(
+            self, "Open a folder", "./")
+        self.srtStr.setText(srt_dir)
+
+    def select_output_folder(self):
+        output_dir = QFileDialog.getExistingDirectory(
+            self, "Open a folder", "./")
+        self.outputStr.setText(output_dir)
+
+    def clear(self):
+        self.folderStr.setText('')
+        self.srtStr.setText('')
+        self.newfilenameStr.setText('')
+        self.outputStr.setText('')
+        self.originalfnStr.setText('')
+        self.originalfnStr.setEnabled(False)
+        self.samefoldBox.setChecked(False)
+        self.skipdupBox.setChecked(False)
+        self.complexBox.setChecked(False)
+        self.complexmode = False
+        self.skipdup = False
+        self.outsamefolder = False
+        self.hintLabel.setText('')
+        self.okBtn.setEnabled(False)
 
     def center(self):
-
         qr = self.frameGeometry()
         cp = QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
 
     def closeEvent(self, event):
-
         reply = QMessageBox.question(self, 'Message',
             "Are you sure to quit?", QMessageBox.Yes |
             QMessageBox.No)
@@ -41,9 +108,74 @@ class Example(QWidget):
         else:
             event.ignore()
 
+    def checkbox_state(self, box):
+        if box.text() == 'Output in Same Folder':
+            if box.isChecked():
+                self.outsamefolder = True
+                self.outputBtn.setEnabled(False)
+            else:
+                self.outsamefolder = False
+                self.outputBtn.setEnabled(True)
+            self.ok_btn_validate()
+
+        elif box.text() == 'Skip Duplicate files':
+            if box.isChecked():
+                self.skipdup = True
+            else:
+                self.skipdup = False
+        elif box.text() == 'Complex mode':
+            if box.isChecked():
+                self.complexmode = True
+                self.originalfnStr.setEnabled(True)
+            else:
+                self.originalfnStr.setEnabled(False)
+
+    def change_files_name(self):
+        original_filename = self.originalfnStr.text()
+        new_filename = self.newfilenameStr.text()
+        original_folder = self.folderStr.text()
+        srt_folder = self.srtStr.text()
+        new_folder = self.outputStr.text()
+        change_files_in_folder(original_folder, original_filename,
+                               new_folder, new_filename, self.complexmode,
+                               self.outsamefolder, self.skipdup)
+        if srt_folder != "":
+            change_srt_files_in_folder(srt_folder, original_filename,
+                                       new_folder, new_filename,
+                                       self.complexmode, self.outsamefolder,
+                                       self.skipdup)
+
+    def ok_btn_validate(self):
+        original_filename = self.originalfnStr.text()
+        # new_filename = self.newfilenameStr.text()
+        original_folder = self.folderStr.text()
+        srt_folder = self.srtStr.text()
+        new_folder = self.outputStr.text()
+        hint_str = ""
+
+        if not folder_exist(original_folder):
+            hint_str += "Files Folder can't no found"
+        if(srt_folder != "") and (not folder_exist(srt_folder)):
+            hint_str += "\nSrt Folder can't no found"
+        # Output in same folder
+        if (not self.outsamefolder) and (not folder_exist(new_folder)):
+            hint_str += "\nOutput Folder can't no found"
+        # Complex mode
+        if (self.complexmode):
+            if not ("{" in original_filename) or not ("}" in original_filename):
+                hint_str += "\nNew Filename format invalid, must includes '{}' to wrap the number"
+        # if new_filename == "":
+        #     hint_str += "\nNew Filename is empty"
+        if(hint_str == ""):
+            self.okBtn.setEnabled(True)
+        else:
+            self.okBtn.setEnabled(False)
+        self.hintLabel.setText(hint_str)
+
 
 if __name__ == '__main__':
 
     app = QApplication(sys.argv)
-    ex = Example()
+    m = Main()
+    m.show()
     sys.exit(app.exec_())
