@@ -151,9 +151,9 @@
          </widget>
         </item>
         <item row="9" column="2">
-         <widget class="QCheckBox" name="complexBox">
+         <widget class="QCheckBox" name="removeBox">
           <property name="text">
-           <string>Complex mode</string>
+           <string>Remove Original files</string>
           </property>
          </widget>
         </item>

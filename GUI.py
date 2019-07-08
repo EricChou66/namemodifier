@@ -44,13 +44,13 @@ class Main(QMainWindow):
         # Output file in the origin path
         self.samefoldBox.stateChanged.connect(lambda: self.checkbox_state(self.samefoldBox))
 
-        # Complex mode CheckBox
-        self.complexBox.stateChanged.connect(lambda: self.checkbox_state(self.complexBox))
+        # Remove original files CheckBox
+        self.removeBox.stateChanged.connect(lambda: self.checkbox_state(self.complexBox))
 
         # Original filename input check:
         self.originalfnStr.textChanged.connect(self.ok_btn_validate)
 
-        # Disable complex mode's original filename input
+        # Reset to default status
         self.clear()
 
         # Ok Button
@@ -82,11 +82,10 @@ class Main(QMainWindow):
         self.newfilenameStr.setText('')
         self.outputStr.setText('')
         self.originalfnStr.setText('')
-        self.originalfnStr.setEnabled(False)
         self.samefoldBox.setChecked(False)
         self.skipdupBox.setChecked(False)
-        self.complexBox.setChecked(False)
-        self.complexmode = False
+        self.removeBox.setChecked(False)
+        self.remove = False
         self.skipdup = False
         self.outsamefolder = False
         self.hintLabel.setText('')
@@ -123,12 +122,11 @@ class Main(QMainWindow):
                 self.skipdup = True
             else:
                 self.skipdup = False
-        elif box.text() == 'Complex mode':
+        elif box.text() == 'Remove Original files':
             if box.isChecked():
-                self.complexmode = True
-                self.originalfnStr.setEnabled(True)
+                self.remove = True
             else:
-                self.originalfnStr.setEnabled(False)
+                self.remove = False
 
     def change_files_name(self):
         original_filename = self.originalfnStr.text()
@@ -137,12 +135,12 @@ class Main(QMainWindow):
         srt_folder = self.srtStr.text()
         new_folder = self.outputStr.text()
         change_files_in_folder(original_folder, original_filename,
-                               new_folder, new_filename, self.complexmode,
+                               new_folder, new_filename, self.remove,
                                self.outsamefolder, self.skipdup)
         if srt_folder != "":
             change_srt_files_in_folder(srt_folder, original_filename,
                                        new_folder, new_filename,
-                                       self.complexmode, self.outsamefolder,
+                                       self.remove, self.outsamefolder,
                                        self.skipdup)
 
     def ok_btn_validate(self):
@@ -160,10 +158,8 @@ class Main(QMainWindow):
         # Output in same folder
         if (not self.outsamefolder) and (not folder_exist(new_folder)):
             hint_str += "\nOutput Folder can't no found"
-        # Complex mode
-        if (self.complexmode):
-            if not ("{" in original_filename) or not ("}" in original_filename):
-                hint_str += "\nNew Filename format invalid, must includes '{}' to wrap the number"
+        if (original_filename != "") and (not ("{" in original_filename) or not ("}" in original_filename)):
+            hint_str += "\nNew Filename format invalid, must includes '{}' to wrap the number"
         # if new_filename == "":
         #     hint_str += "\nNew Filename is empty"
         if(hint_str == ""):
