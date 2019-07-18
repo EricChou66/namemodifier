@@ -165,9 +165,9 @@
          </widget>
         </item>
         <item row="1" column="0" alignment="Qt::AlignLeft">
-         <widget class="QLabel" name="srtLabel">
+         <widget class="QLabel" name="extLabel">
           <property name="text">
-           <string>Srt Folder</string>
+           <string>File extension</string>
           </property>
           <property name="indent">
            <number>0</number>
@@ -195,9 +195,9 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="srtStr">
+         <widget class="QLineEdit" name="extStr">
           <property name="readOnly">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -208,13 +208,6 @@
           </property>
           <property name="indent">
            <number>0</number>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QPushButton" name="srtBtn">
-          <property name="text">
-           <string>Browse</string>
           </property>
          </widget>
         </item>

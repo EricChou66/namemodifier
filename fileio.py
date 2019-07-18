@@ -2,22 +2,35 @@ import re
 import os
 import shutil
 
-video_filetype = ['avi', 'mp4', 'wmv', 'flv', 'm4a']
 
-sub_filetype = ['srt', 'ass', 'ssa']
+# Covert file_ext string to list
+def gen_ext_list(file_ext):
+    return file_ext.split(',')
+
 
 # Validate if folder is exist
 def folder_exist(path):
     return os.path.isdir(path)
 
+
 # Validate if file is exist
 def file_exist(path):
     return os.path.isfile(path)
 
+
+# Split the original_filename by "{" and "}"
+# And escape regex character . ^ $ * + ? { } [ ] \ | ( )
+def split_escape(filename):
+    # deal with mulitple '{' '}'
+    left = filename.rpartition("{")[0]
+    right = filename.split("}", 1)[1]
+    return re.compile(re.escape(left)+r'(\d+)'+re.escape(right))
+
+
 # Change files name upder specific folder
 def change_files_in_folder(original_folder, original_filename, new_folder,
                            new_filename, removeflag, samefolderflag,
-                           skipdupflag):
+                           skipdupflag, file_ext):
     # Duplicate file name counter
     dup_cnt = 1
     # Complex new filename(including "{}" to indicate the number's position)
@@ -32,19 +45,24 @@ def change_files_in_folder(original_folder, original_filename, new_folder,
     # else if the original filename containing "{}" to indicate the number's
     # position
     else:
-        left = original_filename.split("{")[0]
-        right = original_filename.split("}")[-1]
-        find_pattern = re.compile(left+r'(\d+)'+right)
+        find_pattern = split_escape(original_filename)
 
     # loop all files under original folder
     for filename in os.listdir(original_folder):
         if(filename.startswith('.')):
             continue
+        # check if file type in file_ext list
         filetype = filename.split('.')[-1]
+        ext_list = gen_ext_list(file_ext)
+        if(filetype not in ext_list):
+            continue
         m = re.search(find_pattern, filename)
         if(m == None):
             continue
-        num = m.group(1).strip('{}')
+        try:
+            num = m.group(1).strip('{}')
+        except IndexError:
+            continue
         folder_path = original_folder
         old_name = os.path.join(folder_path, filename)
         # if the output in same folder is checked
@@ -76,57 +94,5 @@ def change_files_in_folder(original_folder, original_filename, new_folder,
             if not removeflag:
                 shutil.copy2(old_name, new_name)
             # rename file
-            else:
-                os.rename(old_name, new_name)
-
-
-# Change files name upder specific folder
-def change_srt_files_in_folder(original_folder, original_filename, new_folder,
-                           new_filename, removeflag, samefolderflag,
-                           skipdupflag):
-    dup_cnt = 1
-    comp_newname = False
-    # In normal mode, find the last occurance number
-    find_pattern = re.compile(r'{.*}')
-    if(find_pattern.search(new_filename)):
-        comp_newname = True
-    if(original_filename == ""):
-        find_pattern = re.compile(r'(\d+)\D*$')
-    else:
-        left = original_filename.split("{")[0]
-        right = original_filename.split("}")[-1]
-        find_pattern = re.compile(left+r'(\d+)'+right)
-
-    for filename in os.listdir(original_folder):
-        filetype = filename.split('.')[-1]
-        if not (filetype in sub_filetype):
-            continue
-        m = re.search(find_pattern, filename)
-        num = m.group(1)
-        folder_path = original_folder
-        old_name = os.path.join(folder_path, filename)
-        if not samefolderflag:
-            folder_path = new_folder
-        if(comp_newname):
-            tmp_name = re.sub(r'{.*}', str(num), new_filename)
-        else:
-            tmp_name = "%s%s"%(new_filename, num)
-        new_name = os.path.join(folder_path, "%s.%s"%(tmp_name, filetype))
-        isdup = False
-        while(True):
-            if(file_exist(new_name)):
-                isdup = True
-                if(skipdupflag):
-                    break
-                new_name = os.path.join(folder_path, tmp_name + "(%s).%s"%(dup_cnt, filetype))
-                dup_cnt += 1
-            else:
-                break
-        dup_cnt = 1
-        if(isdup and skipdupflag):
-            continue
-        else:
-            if not removeflag:
-                shutil.copy2(old_name, new_name)
             else:
                 os.rename(old_name, new_name)
