@@ -6,7 +6,6 @@ from PyQt5.QtWidgets import  QApplication,\
 from PyQt5.uic import loadUi
 from fileio import folder_exist
 from fileio import change_files_in_folder
-from fileio import change_srt_files_in_folder
 
 
 class Main(QMainWindow):
@@ -29,9 +28,6 @@ class Main(QMainWindow):
         # Select Folder Button
         self.folderBtn.clicked.connect(self.select_folder)
 
-        # Select Srt Folder Button
-        self.srtBtn.clicked.connect(self.select_srt_folder)
-
         # Select Output Folder Button
         self.outputBtn.clicked.connect(self.select_output_folder)
 
@@ -45,7 +41,7 @@ class Main(QMainWindow):
         self.samefoldBox.stateChanged.connect(lambda: self.checkbox_state(self.samefoldBox))
 
         # Remove original files CheckBox
-        self.removeBox.stateChanged.connect(lambda: self.checkbox_state(self.complexBox))
+        self.removeBox.stateChanged.connect(lambda: self.checkbox_state(self.removeBox))
 
         # Original filename input check:
         self.originalfnStr.textChanged.connect(self.ok_btn_validate)
@@ -66,11 +62,6 @@ class Main(QMainWindow):
             self, "Open a folder", "./")
         self.folderStr.setText(folder_dir)
 
-    def select_srt_folder(self):
-        srt_dir = QFileDialog.getExistingDirectory(
-            self, "Open a folder", "./")
-        self.srtStr.setText(srt_dir)
-
     def select_output_folder(self):
         output_dir = QFileDialog.getExistingDirectory(
             self, "Open a folder", "./")
@@ -78,7 +69,7 @@ class Main(QMainWindow):
 
     def clear(self):
         self.folderStr.setText('')
-        self.srtStr.setText('')
+        self.extStr.setText('')
         self.newfilenameStr.setText('')
         self.outputStr.setText('')
         self.originalfnStr.setText('')
@@ -132,29 +123,26 @@ class Main(QMainWindow):
         original_filename = self.originalfnStr.text()
         new_filename = self.newfilenameStr.text()
         original_folder = self.folderStr.text()
-        srt_folder = self.srtStr.text()
+        file_ext = self.extStr.text()
         new_folder = self.outputStr.text()
         change_files_in_folder(original_folder, original_filename,
                                new_folder, new_filename, self.remove,
-                               self.outsamefolder, self.skipdup)
-        if srt_folder != "":
-            change_srt_files_in_folder(srt_folder, original_filename,
-                                       new_folder, new_filename,
-                                       self.remove, self.outsamefolder,
-                                       self.skipdup)
-
+                               self.outsamefolder, self.skipdup, file_ext)
     def ok_btn_validate(self):
         original_filename = self.originalfnStr.text()
         # new_filename = self.newfilenameStr.text()
         original_folder = self.folderStr.text()
-        srt_folder = self.srtStr.text()
+        file_ext = self.extStr.text()
         new_folder = self.outputStr.text()
         hint_str = ""
 
         if not folder_exist(original_folder):
             hint_str += "Files Folder can't no found"
-        if(srt_folder != "") and (not folder_exist(srt_folder)):
-            hint_str += "\nSrt Folder can't no found"
+        # File extension must be not null
+        if(file_ext == ""):
+            hint_str += "\nFile extension must be specified"
+        elif(' ' in file_ext):
+            hint_str += "\nFile extension must be seperate with ',' not space"
         # Output in same folder
         if (not self.outsamefolder) and (not folder_exist(new_folder)):
             hint_str += "\nOutput Folder can't no found"
