@@ -1,4 +1,4 @@
-# namemodifier
+# namemodifier.py
 
 ### description: 
 
@@ -17,3 +17,15 @@
 - "-t" the specific file type that you want to change
 
 - "-l" the specific location of the files(a folder)
+
+# GUI version: GUI.py
+
+## Version 0.9
+
+### description:
+
+- Use PyQt5 as the GUI
+
+- pip install -r requirements.txt
+
+- Not support UI thread currently 
