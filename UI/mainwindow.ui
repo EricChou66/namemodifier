@@ -25,20 +25,6 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="1">
-     <widget class="QPushButton" name="clearBtn">
-      <property name="text">
-       <string>Clear</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="2">
-     <widget class="QPushButton" name="quitBtn">
-      <property name="text">
-       <string>Quit</string>
-      </property>
-     </widget>
-    </item>
     <item row="0" column="0" colspan="3">
      <widget class="QFrame" name="frame">
       <property name="frameShape">
@@ -57,7 +43,214 @@
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_3">
-        <item row="11" column="1">
+        <item row="13" column="0">
+         <widget class="QCheckBox" name="samefoldBox">
+          <property name="text">
+           <string>Output in Same Folder</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLineEdit" name="extStr">
+          <property name="readOnly">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="folderStr">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="readOnly">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" alignment="Qt::AlignLeft">
+         <widget class="QLabel" name="extLabel">
+          <property name="text">
+           <string>File extension</string>
+          </property>
+          <property name="indent">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="0" alignment="Qt::AlignLeft">
+         <widget class="QLabel" name="originalfnLabel">
+          <property name="text">
+           <string>Original Filename</string>
+          </property>
+          <property name="indent">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+        <item row="13" column="2">
+         <widget class="QCheckBox" name="removeBox">
+          <property name="text">
+           <string>Remove Original files</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" alignment="Qt::AlignLeft">
+         <widget class="QLabel" name="folderLabel">
+          <property name="text">
+           <string>Files Folder</string>
+          </property>
+          <property name="indent">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="1">
+         <widget class="QLineEdit" name="outputStr">
+          <property name="readOnly">
+           <bool>false</bool>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QLineEdit" name="newfilenameStr">
+          <property name="readOnly">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="2">
+         <widget class="QPushButton" name="outputBtn">
+          <property name="text">
+           <string>Browse</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="1">
+         <widget class="QLineEdit" name="originalfnStr">
+          <property name="readOnly">
+           <bool>false</bool>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0" alignment="Qt::AlignLeft">
+         <widget class="QLabel" name="newfilenamLabel">
+          <property name="text">
+           <string>New Filename</string>
+          </property>
+          <property name="indent">
+           <number>0</number>
+          </property>
+          <property name="buddy">
+           <cstring>newfilenameStr</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QLabel" name="exthintLabel">
+          <property name="maximumSize">
+           <size>
+            <width>500</width>
+            <height>60</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color:red</string>
+          </property>
+          <property name="text">
+           <string>hint</string>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <property name="indent">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLabel" name="folderhintLabel">
+          <property name="maximumSize">
+           <size>
+            <width>500</width>
+            <height>60</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color:red</string>
+          </property>
+          <property name="text">
+           <string>hint</string>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <property name="indent">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+        <item row="13" column="1" alignment="Qt::AlignHCenter">
+         <widget class="QCheckBox" name="skipdupBox">
+          <property name="text">
+           <string>Skip Duplicate files</string>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="0" alignment="Qt::AlignLeft">
+         <widget class="QLabel" name="outputLabel">
+          <property name="text">
+           <string>Output Folder</string>
+          </property>
+          <property name="indent">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QPushButton" name="folderBtn">
+          <property name="text">
+           <string>Browse</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="QLabel" name="newnamehintLabel">
+          <property name="maximumSize">
+           <size>
+            <width>500</width>
+            <height>60</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color:red</string>
+          </property>
+          <property name="text">
+           <string>hint</string>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <property name="indent">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+        <item row="15" column="1">
          <widget class="QLabel" name="instruLabel">
           <property name="maximumSize">
            <size>
@@ -79,140 +272,8 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="1">
-         <widget class="QLineEdit" name="outputStr">
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-          <property name="clearButtonEnabled">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QLineEdit" name="originalfnStr">
-          <property name="readOnly">
-           <bool>false</bool>
-          </property>
-          <property name="clearButtonEnabled">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0" alignment="Qt::AlignLeft">
-         <widget class="QLabel" name="folderLabel">
-          <property name="text">
-           <string>Files Folder</string>
-          </property>
-          <property name="indent">
-           <number>0</number>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="0" alignment="Qt::AlignLeft">
-         <widget class="QLabel" name="outputLabel">
-          <property name="text">
-           <string>Output Folder</string>
-          </property>
-          <property name="indent">
-           <number>0</number>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <widget class="QPushButton" name="folderBtn">
-          <property name="text">
-           <string>Browse</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="folderStr">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QLineEdit" name="newfilenameStr">
-          <property name="readOnly">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="2">
-         <widget class="QPushButton" name="outputBtn">
-          <property name="text">
-           <string>Browse</string>
-          </property>
-         </widget>
-        </item>
-        <item row="9" column="2">
-         <widget class="QCheckBox" name="removeBox">
-          <property name="text">
-           <string>Remove Original files</string>
-          </property>
-         </widget>
-        </item>
-        <item row="9" column="0">
-         <widget class="QCheckBox" name="samefoldBox">
-          <property name="text">
-           <string>Output in Same Folder</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0" alignment="Qt::AlignLeft">
-         <widget class="QLabel" name="extLabel">
-          <property name="text">
-           <string>File extension</string>
-          </property>
-          <property name="indent">
-           <number>0</number>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0" alignment="Qt::AlignLeft">
-         <widget class="QLabel" name="newfilenamLabel">
-          <property name="text">
-           <string>New Filename</string>
-          </property>
-          <property name="indent">
-           <number>0</number>
-          </property>
-          <property name="buddy">
-           <cstring>newfilenameStr</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="9" column="1" alignment="Qt::AlignHCenter">
-         <widget class="QCheckBox" name="skipdupBox">
-          <property name="text">
-           <string>Skip Duplicate files</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="extStr">
-          <property name="readOnly">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0" alignment="Qt::AlignLeft">
-         <widget class="QLabel" name="originalfnLabel">
-          <property name="text">
-           <string>Original Filename</string>
-          </property>
-          <property name="indent">
-           <number>0</number>
-          </property>
-         </widget>
-        </item>
-        <item row="10" column="1">
-         <widget class="QLabel" name="hintLabel">
+        <item row="11" column="1">
+         <widget class="QLabel" name="outputhintLabel">
           <property name="maximumSize">
            <size>
             <width>500</width>
@@ -225,6 +286,34 @@
           <property name="text">
            <string>hint</string>
           </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <property name="indent">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="1">
+         <widget class="QLabel" name="originalhintLabel">
+          <property name="maximumSize">
+           <size>
+            <width>500</width>
+            <height>60</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color:red</string>
+          </property>
+          <property name="text">
+           <string>hint</string>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
           <property name="margin">
            <number>0</number>
           </property>
@@ -235,6 +324,20 @@
         </item>
        </layout>
       </widget>
+     </widget>
+    </item>
+    <item row="1" column="2">
+     <widget class="QPushButton" name="quitBtn">
+      <property name="text">
+       <string>Quit</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QPushButton" name="clearBtn">
+      <property name="text">
+       <string>Clear</string>
+      </property>
      </widget>
     </item>
    </layout>
