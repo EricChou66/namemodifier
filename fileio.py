@@ -22,10 +22,13 @@ def file_exist(path):
 # And escape regex character . ^ $ * + ? { } [ ] \ | ( )
 def split_escape(filename):
     # deal with mulitple '{' '}'
-    left = filename.rpartition("{")[0]
-    right = filename.split("}", 1)[1]
-    return re.compile(re.escape(left)+r'(\d+)'+re.escape(right))
-
+    try:
+        tmp = filename.rpartition("{")
+        left = tmp[0]
+        right = tmp[2].split("}", 1)[1]
+        return re.compile(re.escape(left)+r'(\d+)'+re.escape(right))
+    except:
+        return re.compile(r'(\d+)\D*$')
 
 # Change files name upder specific folder
 def change_files_in_folder(original_folder, original_filename, new_folder,
@@ -46,6 +49,7 @@ def change_files_in_folder(original_folder, original_filename, new_folder,
     # position
     else:
         find_pattern = split_escape(original_filename)
+        print(find_pattern)
 
     # loop all files under original folder
     for filename in os.listdir(original_folder):
